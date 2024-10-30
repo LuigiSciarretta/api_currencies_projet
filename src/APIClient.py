@@ -52,10 +52,12 @@ class APIClient:
 
     
 
-if __name__ == '__main__':
-    daily_endpoint = 'https://api.frankfurter.app/latest'
-    # my_client = APIClient()
-    # response = my_client.get_storic_rates('2024-01-01', '2024-05-05')
-    my_client2 = APIClient(daily_endpoint)
-    response2 = my_client2.get_daily_time_specific_rates( 'USD')
-    print(response2)
+# if __name__ == '__main__':
+#     daily_endpoint = 'https://api.frankfurter.app/latest'
+#     my_client = APIClient()
+#     response = my_client.get_storic_rates('2024-01-01', '2024-05-05')
+#     for k, v in response.items():
+#         print(f"chiave: {k}, valore: {v}")
+#     # my_client2 = APIClient(daily_endpoint)
+#     # response2 = my_client2.get_daily_time_specific_rates( 'USD')
+#     #print(response2)
