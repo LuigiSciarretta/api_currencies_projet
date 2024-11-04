@@ -24,16 +24,17 @@ class Database():
             print("Connessione già esistente")
         
     
-    def create_table(self):
+    def create_table(self, table):
         if self.conn is None:
             print("Nessuna connessione attiva")
         else:
-            create_table_query = '''CREATE TABLE IF NOT EXISTS storic_currencies_table
-                    (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                    base_currency CHAR, 
-                    date CHAR,
-                    corresponding_currency CHAR,
-                    corresponding_currency_value FLOAT)'''
+            create_table_query = f'''CREATE TABLE IF NOT EXISTS {table}
+                    (
+                    base_currency TEXT, 
+                    date TEXT,
+                    corresponding_currency TEXT,
+                    corresponding_currency_value FLOAT,
+                    PRIMARY KEY (date, corresponding_currency))'''
             cur = self.conn.cursor()
             try:
                 cur.execute(create_table_query)
@@ -43,12 +44,12 @@ class Database():
                 print(f"Errore nella creazione della tabella: {e}")
         
     
-    def insert_values(self, records):
+    def insert_values(self, records, table):
         if self.conn is None:
             print("Nessuna connessione attiva")
         else:
             try:
-                insert_query = '''INSERT INTO storic_currencies_table 
+                insert_query = f'''INSERT INTO {table} 
                           (base_currency, date, corresponding_currency, corresponding_currency_value) 
                           VALUES (?, ?, ?, ?)'''
                 cur = self.conn.cursor()
@@ -68,9 +69,9 @@ class Database():
             print("Connessione già chiusa")
 
     
-    def test_insert(self):
+    def test_insert(self, table):
         cur = self.conn.cursor()
-        query = "SELECT * FROM storic_currencies_table"
+        query = f"SELECT * FROM {table}"
         cur.execute(query)
         ris = cur.fetchall()
         print(ris)
@@ -83,16 +84,22 @@ class Database():
         print(result)
 
 
-# if __name__ == '__main__':
-#     db = Database()
-#     # db2 = Database()
-#     db_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'db_prova.db')
-#     db.create_connection(db_path)
-#     db.create_table()
-#     db.test_table_creation()
-#     # db.insert_values('1', 'Gigi', 'Sciarra')
-#     db.test_insert()
-#     db.close_connection()
+    def show_tables_in_db(self, database:str):
+        cur = self.conn.cursor()
+        cur.execute(f"SELECT name FROM sqlite_master WHERE type='{database}';")
+        result = cur.fetchall()
+        for i, table in enumerate(result):
+            print(f"Table {i+1} -> {table}")
+
+    
+    def count_row(self, table):
+        cur = self.conn.cursor()
+        cur.execute(f"SELECT COUNT(*) FROM {table};")
+        result = cur.fetchall()
+        print(f"Row number: {result}")
+
+
+
 
         
     
