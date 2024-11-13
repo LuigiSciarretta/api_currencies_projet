@@ -7,6 +7,7 @@ if __name__ == '__main__':
     
     #base_url = "https://api.frankfurter.app/"
     
+    
 
     client = APIClient()
     # storic_result = client.get_storic_rates('2002-01-01', '2024-11-04')
