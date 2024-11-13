@@ -4,7 +4,7 @@ import os
 class Database():
     _istance = None
 
-    #Singleton pattern for creation of a single istance of database and singl connection
+    #Singleton pattern for creation of a single istance of database and single connection
     def __new__(cls):
         if cls._istance is None:
             cls._istance = super(Database, cls).__new__(cls)
@@ -24,7 +24,7 @@ class Database():
             print("Connessione già esistente")
         
     
-    def create_table(self, table):
+    def create_table(self, table: str):
         if self.conn is None:
             print("Nessuna connessione attiva")
         else:
@@ -44,7 +44,7 @@ class Database():
                 print(f"Errore nella creazione della tabella: {e}")
         
     
-    def insert_values(self, records, table):
+    def insert_values(self, records: tuple, table: str):
         if self.conn is None:
             print("Nessuna connessione attiva")
         else:
@@ -69,7 +69,29 @@ class Database():
             print("Connessione già chiusa")
 
     
-    def test_insert(self, table):
+    #Funzioni di supporto
+
+    def get_last_date(self, table:str) -> str:
+        cur = self.conn.cursor()
+        query = f"SELECT MAX(date) FROM {table}"
+        cur.execute(query)
+        max_date_aggiornamento = cur.fetchone()[0]
+        print(f"La data più recente è {max_date_aggiornamento}")
+        return max_date_aggiornamento
+    
+
+    def get_current_date(self, table: str):
+        cur = self.conn.cursor()
+        query = "SELECT date('now');"
+        cur.execute(query)
+        current_date = cur.fetchone()[0]
+        print(f"La data odierna è {current_date}")
+        return current_date
+
+
+
+
+    def test_insert(self, table: str):
         cur = self.conn.cursor()
         query = f"SELECT * FROM {table}"
         cur.execute(query)
@@ -84,15 +106,8 @@ class Database():
         print(result)
 
 
-    def show_tables_in_db(self, database:str):
-        cur = self.conn.cursor()
-        cur.execute(f"SELECT name FROM sqlite_master WHERE type='{database}';")
-        result = cur.fetchall()
-        for i, table in enumerate(result):
-            print(f"Table {i+1} -> {table}")
-
     
-    def count_row(self, table):
+    def count_row(self, table:str):
         cur = self.conn.cursor()
         cur.execute(f"SELECT COUNT(*) FROM {table};")
         result = cur.fetchall()

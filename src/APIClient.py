@@ -33,6 +33,20 @@ class APIClient:
         return response_json
     
 
+    def get_daily_rates(self):
+        daily_url = f"{APIClient.base_url}/latest"
+        daily_response = requests.get(daily_url)
+        if daily_response.ok:
+            print("Richieta verso endpoint giornaliero effettuata correttamente")
+            try:
+                daily_response_json = daily_response.json()
+            except Exception as e:
+                print(f"Errore: {e}")
+        else:
+            print("La Richiesta all'endpoint giornaliero non è andata a buon fine")
+        return daily_response_json
+    
+
 
     def  get_daily_time_specific_rates(self, currency: str) -> str:
         """
