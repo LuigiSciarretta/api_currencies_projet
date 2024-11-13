@@ -62,5 +62,15 @@ class APIClient:
                 print(f"Il {actual_date} la valuta {actual_currency} vale {currency_value} {currency}")
             except Exception as e:
                 print(f"Errore: {e}")
+
+
+    @staticmethod
+    def choose_request_type(time_difference:int) -> str:
+        tipology = ''
+        if time_difference > 1: #soglia storica
+            tipology = 'storic'
+        elif time_difference == 1: #soglia giornaliera
+            tipology = 'daily'
+        return tipology
             
     
