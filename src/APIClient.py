@@ -52,7 +52,8 @@ class APIClient:
         """
         Il metodo di istanza, effettua una conversione ad una particolare 
         valuta corrispondete al giorno dell'esecuzione del programma"""
-        response = requests.get(self.url)
+        daily_url = f"{APIClient.base_url}/latest"
+        response = requests.get(daily_url)
         if response.ok:
             try:
                 response_json = response.json()
@@ -61,7 +62,7 @@ class APIClient:
                 currency_value = response_json['rates'][currency]
                 print(f"Il {actual_date} la valuta {actual_currency} vale {currency_value} {currency}")
             except Exception as e:
-                print(f"Errore: {e}")
+                print(f"Errore: {e} ")
 
 
     @staticmethod

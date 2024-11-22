@@ -1,7 +1,6 @@
 import sqlite3
 from datetime import date, datetime, timedelta
 from typing import Union
-import os
 
 class Database():
     _istance = None
@@ -18,17 +17,17 @@ class Database():
         if self.conn is None:
             try:
                 self.conn = sqlite3.connect(db_bath) #, detect_types=True
-                print("Connessione riuscita")
+                print("Connection to database succeeded")
                 return self.conn
             except Exception as e:
-                print(f"Connessione non riuscita causa Errore: {e}")
+                print(f"Connection to database failed. Error: {e}")
         else:
-            print("Connessione già esistente")
+            print("Existing connection")
         
     
     def create_table(self, table: str):
         if self.conn is None:
-            print("Nessuna connessione attiva")
+            print("No active connection")
         else:
             create_table_query = f'''CREATE TABLE IF NOT EXISTS {table}
                     (
@@ -41,14 +40,14 @@ class Database():
             try:
                 cur.execute(create_table_query)
                 self.conn.commit()
-                print("Tabella creata correttamente")
+                print("Table correctly created")
             except Exception as e:
-                print(f"Errore nella creazione della tabella: {e}")
+                print(f"Error in table creation: {e}")
         
     
     def insert_values(self, records: tuple, table: str):
         if self.conn is None:
-            print("Nessuna connessione attiva")
+            print("No active connection")
         else:
             try:
                 insert_query = f'''INSERT INTO {table} 
@@ -57,18 +56,18 @@ class Database():
                 cur = self.conn.cursor()
                 cur.executemany(insert_query, records) 
                 self.conn.commit()
-                print("Valori inseriti correttamente")
+                print("Values entered successfully")
             except Exception as e:
-                print(f"Errore nell'inserimento: {e}")
+                print(f"Erro during insert values: {e}")
 
 
     def close_connection(self):
         if self.conn:
             self.conn.close()
-            print("Connessione DB chiusa correttamene")
+            print("Database connection correctly closed")
             self.conn = None
         else:
-            print("Connessione già chiusa")
+            print("Connection already closed")
 
     
     #Funzioni di supporto
@@ -128,7 +127,7 @@ class Database():
             last_db_update_dateformat = datetime.strptime(last_db_update, date_format)
             date_for_request_dateformat = last_db_update_dateformat + timedelta(days = 1)
         else:
-            raise TypeError("Il parametro deve essere una stringa nel formato YYYY-MM-DD o un oggetto datetime")
+            raise TypeError("The parameter must be a string in the format YYYY-MM-DD or a datetime object")
         # Deconversion in str format 
         date_for_request_strformat = date_for_request_dateformat.strftime(date_format)
         return date_for_request_strformat
